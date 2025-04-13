@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolyGlot Pro - React Demo</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Helvetica', 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      color: #202124;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header styles */
+    header {
+      background-color: #4285f4;
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .title-container {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin: 0;
+      background: linear-gradient(45deg, #fff, #e8f0fe);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    .subtitle {
+      font-size: 0.9rem;
+      margin: 0;
+      opacity: 0.8;
+    }
+    
+    .controls-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .github-button, .theme-button {
+      background: transparent;
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .github-button:hover, .theme-button:hover {
+      opacity: 0.8;
+      transform: translateY(-2px);
+    }
+    
+    /* Main content styles */
+    main {
+      flex: 1;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Language switcher styles */
+    .language-switcher {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      width: 100%;
+    }
+    
+    .language-select-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .language-label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #757575;
+      text-transform: uppercase;
+    }
+    
+    .select-container {
+      position: relative;
+      width: 100%;
+    }
+    
+    .language-select {
+      padding: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid #dadce0;
+      background-color: #ffffff;
+      color: #202124;
+      font-size: 1rem;
+      width: 100%;
+      cursor: pointer;
+      appearance: none;
+    }
+    
+    .select-arrow {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #757575;
+    }
+    
+    .swap-button {
+      background-color: transparent;
+      color: #4285f4;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .swap-button:hover {
+      background-color: rgba(66, 133, 244, 0.1);
+      transform: scale(1.1);
+    }
+    
+    .auto-detect-badge {
+      display: inline-block;
+      background-color: rgba(66, 133, 244, 0.2);
+      color: #4285f4;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+      font-weight: bold;
+    }
+    
+    /* Text areas container */
+    .text-areas-container {
+      display: flex;
+      gap: 1.5rem;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+    
+    /* Text area styles */
+    .text-area-container {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      background-color: #ffffff;
+      transition: all 0.3s ease;
+      height: 300px;
+      overflow: hidden;
+    }
+    
+    .text-area-label {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #4285f4;
+      pointer-events: none;
+      z-index: 1;
+      transform: translateY(-5px) scale(0.9);
+    }
+    
+    .text-area {
+      width: 100%;
+      height: 100%;
+      padding: 2.5rem 1rem 1.5rem;
+      border: none;
+      background-color: transparent;
+      color: #202124;
+      font-size: 1rem;
+      line-height: 1.5;
+      resize: none;
+      flex: 1;
+    }
+    
+    .text-area:focus {
+      outline: none;
+    }
+    
+    .char-count {
+      position: absolute;
+      bottom: 10px;
+      right: 15px;
+      font-size: 0.75rem;
+      color: #757575;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .char-count-ring {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #34a853;
+      position: relative;
+      display: inline-block;
+      margin-right: 5px;
+    }
+    
+    .char-count-ring::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #34a853;
+      opacity: 0.5;
+    }
+    
+    .detected-language {
+      position: absolute;
+      bottom: 10px;
+      left: 15px;
+      font-size: 0.75rem;
+      color: #4285f4;
+      font-style: italic;
+    }
+    
+    /* Control buttons styles */
+    .buttons-container {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .control-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: white;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .control-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .control-button.primary { background-color: #4285f4; }
+    .control-button.secondary { background-color: #757575; }
+    .control-button.success { background-color: #34a853; }
+    .control-button.warning { background-color: #fbbc05; }
+    .control-button.info { background-color: #17a2b8; }
+    
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #202124;
+      color: #f8f9fa;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 10;
+      margin-bottom: 5px;
+    }
+    
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: #202124 transparent transparent transparent;
+    }
+    
+    .control-button:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Footer styles */
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background-color: #ffffff;
+      border-top: 1px solid #dadce0;
+      color: #757575;
+      font-size: 0.8rem;
+    }
+    
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #34a853;
+      position: relative;
+    }
+    
+    .status-dot::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border-radius: 50%;
+      border: 2px solid #34a853;
+      opacity: 0.5;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.5;
+      }
+      70% {
+        transform: scale(1.1);
+        opacity: 0.25;
+      }
+      100% {
+        transform: scale(0.95);
+        opacity: 0.5;
+      }
+    }
+    
+    .version {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .text-areas-container {
+        flex-direction: column;
+      }
+      
+      .buttons-container {
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .language-switcher {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .swap-button {
+        margin: 0;
+        align-self: center;
+        transform: rotate(90deg);
+      }
+      
+      .swap-button:hover {
+        transform: rotate(90deg) scale(1.1);
+      }
+      
+      main {
+        padding: 1rem;
+      }
+      
+      .control-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+        flex: 1;
+        min-width: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="title-container">
+      <h1 class="title">PolyGlot Pro</h1>
+      <p class="subtitle">Advanced Language Translator</p>
+    </div>
+    
+    <div class="controls-container">
+      <button class="github-button">
+        GitHub
+      </button>
+      <button class="theme-button">
+        🌙
+      </button>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+      <div class="language-select-group">
+        <label class="language-label">
+          Source Language
+          <span class="auto-detect-badge">Auto</span>
+        </label>
+        <div class="select-container">
+          <select class="language-select">
+            <option>Auto Detect</option>
+            <option>English</option>
+            <option>Spanish</option>
+            <option>French</option>
+            <option>German</option>
+            <option>Chinese</option>
+            <!-- More languages would be here -->
+          </select>
+          <span class="select-arrow">▼</span>
+        </div>
+      </div>
+      
+      <button class="swap-button">⇄</button>
+      
+      <div class="language-select-group">
+        <label class="language-label">Target Language</label>
+        <div class="select-container">
+          <select class="language-select">
+            <option>English</option>
+            <option>Spanish</option>
+            <option>French</option>
+            <option>German</option>
+            <option>Chinese</option>
+            <!-- More languages would be here -->
+          </select>
+          <span class="select-arrow">▼</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Text Areas -->
+    <div class="text-areas-container">
+      <div class="text-area-container">
+        <label class="text-area-label">Enter text to translate</label>
+        <textarea class="text-area" placeholder="Type or paste text here...">Hello, world! This is a sample text to demonstrate the PolyGlot Pro translator.</textarea>
+        <div class="char-count">
+          <span class="char-count-ring"></span>
+          57 / 5000
+        </div>
+      </div>
+      
+      <div class="text-area-container">
+        <label class="text-area-label">Translation</label>
+        <textarea class="text-area" placeholder="Translation will appear here..." readonly>¡Hola, mundo! Este es un texto de ejemplo para demostrar el traductor PolyGlot Pro.</textarea>
+        <div class="char-count">
+          <span class="char-count-ring"></span>
+          74 / 5000
+        </div>
+        <div class="detected-language">Detected: English</div>
+      </div>
+    </div>
+    
+    <!-- Control Buttons -->
+    <div class="buttons-container">
+      <button class="control-button primary">
+        Translate
+        <span class="tooltip">Translate the input text</span>
+      </button>
+      <button class="control-button secondary">
+        Clear
+        <span class="tooltip">Clear both text areas</span>
+      </button>
+      <button class="control-button success">
+        Copy
+        <span class="tooltip">Copy translation to clipboard</span>
+      </button>
+      <button class="control-button warning">
+        Read Aloud
+        <span class="tooltip">Read the translation aloud</span>
+      </button>
+      <button class="control-button info">
+        Voice Input
+        <span class="tooltip">Use your microphone for input</span>
+      </button>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="status">
+      <span class="status-dot"></span>
+      Ready
+    </div>
+    <div class="version">PolyGlot Pro v1.0.0</div>
+  </footer>
+
+  <script>
+    // Demo functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Theme toggle
+      const themeButton = document.querySelector('.theme-button');
+      let isDarkMode = false;
+      
+      themeButton.addEventListener('click', function() {
+        isDarkMode = !isDarkMode;
+        document.body.style.backgroundColor = isDarkMode ? '#202124' : '#f5f5f5';
+        document.body.style.color = isDarkMode ? '#e8eaed' : '#202124';
+        
+        // Update text areas
+        document.querySelectorAll('.text-area-container').forEach(container => {
+          container.style.backgroundColor = isDarkMode ? '#303134' : '#ffffff';
+          container.style.borderColor = isDarkMode ? '#3c4043' : '#dadce0';
+        });
+        
+        document.querySelectorAll('.text-area').forEach(textarea => {
+          textarea.style.color = isDarkMode ? '#e8eaed' : '#202124';
+        });
+        
+        // Update footer
+        const footer = document.querySelector('footer');
+        footer.style.backgroundColor = isDarkMode ? '#202124' : '#ffffff';
+        footer.style.borderColor = isDarkMode ? '#3c4043' : '#dadce0';
+        
+        // Update theme button
+        themeButton.textContent = isDarkMode ? '☀️' : '🌙';
+      });
+      
+      // Translate button
+      const translateButton = document.querySelector('.control-button.primary');
+      translateButton.addEventListener('click', function() {
+        const status = document.querySelector('.status');
+        status.innerHTML = '<span class="status-dot"></span> Translating...';
+        
+        setTimeout(() => {
+          status.innerHTML = '<span class="status-dot"></span> Translated from English to Spanish';
+          setTimeout(() => {
+            status.innerHTML = '<span class="status-dot"></span> Ready';
+          }, 3000);
+        }, 1000);
+      });
+      
+      // Clear button
+      const clearButton = document.querySelector('.control-button.secondary');
+      clearButton.addEventListener('click', function() {
+        document.querySelectorAll('.text-area').forEach(textarea => {
+          textarea.value = '';
+        });
+        
+        document.querySelectorAll('.char-count').forEach(count => {
+          count.innerHTML = '<span class="char-count-ring"></span> 0 / 5000';
+        });
+        
+        const status = document.querySelector('.status');
+        status.innerHTML = '<span class="status-dot"></span> Cleared all text';
+        setTimeout(() => {
+          status.innerHTML = '<span class="status-dot"></span> Ready';
+        }, 3000);
+      });
+      
+      // Copy button
+      const copyButton = document.querySelector('.control-button.success');
+      copyButton.addEventListener('click', function() {
+        const outputText = document.querySelectorAll('.text-area')[1].value;
+        
+        if (outputText.trim()) {
+          navigator.clipboard.writeText(outputText).then(() => {
+            const status = document.querySelector('.status');
+            status.innerHTML = '<span class="status-dot"></span> Text copied to clipboard';
+            setTimeout(() => {
+              status.innerHTML = '<span class="status-dot"></span> Ready';
+            }, 3000);
+          });
+        }
+      });
+      
+      // Read Aloud button
+      const readButton = document.querySelector('.control-button.warning');
+      readButton.addEventListener('click', function() {
+        const outputText = document.querySelectorAll('.text-area')[1].value;
+        
+        if (outputText.trim() && 'speechSynthesis' in window) {
+          const status = document.querySelector('.status');
+          status.innerHTML = '<span class="status-dot"></span> Reading text aloud...';
+          
+          const utterance = new SpeechSynthesisUtterance(outputText);
+          utterance.lang = 'es';
+          
+          utterance.onend = function() {
+            status.innerHTML = '<span class="status-dot"></span> Text read successfully';
+            setTimeout(() => {
+              status.innerHTML = '<span class="status-dot"></span> Ready';
+            }, 3000);
+          };
+          
+          speechSynthesis.speak(utterance);
+        }
+      });
+      
+      // Voice Input button
+      const voiceButton = document.querySelector('.control-button.info');
+      voiceButton.addEventListener('click', function() {
+        if ('webkitSpeechRecognition' in window) {
+          const status = document.querySelector('.status');
+          status.innerHTML = '<span class="status-dot"></span> Listening... Speak now';
+          
+          const recognition = new webkitSpeechRecognition();
+          recognition.lang = 'en-US';
+          
+          recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            document.querySelectorAll('.text-area')[0].value = transcript;
+            
+            status.innerHTML = '<span class="status-dot"></span> Speech recognized';
+            setTimeout(() => {
+              status.innerHTML = '<span class="status-dot"></span> Ready';
+            }, 3000);
+          };
+          
+          recognition.start();
+        }
+      });
+      
+      // Swap button
+      const swapButton = document.querySelector('.swap-button');
+      swapButton.addEventListener('click', function() {
+        const sourceSelect = document.querySelectorAll('.language-select')[0];
+        const targetSelect = document.querySelectorAll('.language-select')[1];
+        
+        if (sourceSelect.value !== 'Auto Detect') {
+          const temp = sourceSelect.value;
+          sourceSelect.value = targetSelect.value;
+          targetSelect.value = temp;
+          
+          // Swap text
+          const sourceText = document.querySelectorAll('.text-area')[0].value;
+          const targetText = document.querySelectorAll('.text-area')[1].value;
+          
+          document.querySelectorAll('.text-area')[0].value = targetText;
+          document.querySelectorAll('.text-area')[1].value = sourceText;
+          
+          const status = document.querySelector('.status');
+          status.innerHTML = '<span class="status-dot"></span> Languages and text swapped';
+          setTimeout(() => {
+            status.innerHTML = '<span class="status-dot"></span> Ready';
+          }, 3000);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
