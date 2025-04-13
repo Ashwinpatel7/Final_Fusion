@@ -182,15 +182,7 @@ const Header = () => {
     window.open(GITHUB_URL, '_blank', 'noopener,noreferrer');
   };
 
-  const handleHelpClick = () => {
-    // Navigate to help page
-    window.location.href = '/help';
-  };
-
-  const handleAboutClick = () => {
-    // Navigate to about page
-    window.location.href = '/about';
-  };
+  // We'll use Link components instead of these handlers
 
   return (
     <HeaderContainer>
@@ -221,23 +213,15 @@ const Header = () => {
       </NavContainer>
 
       <ControlsContainer>
-        <HeaderButton
-          onClick={handleHelpClick}
-          aria-label="Help"
-        >
+        <NavLink to="/help" aria-label="Help">
           <FaQuestionCircle size={18} />
           Help
-          <Tooltip>Help & Documentation</Tooltip>
-        </HeaderButton>
+        </NavLink>
 
-        <HeaderButton
-          onClick={handleAboutClick}
-          aria-label="About"
-        >
+        <NavLink to="/about" aria-label="About">
           <FaInfoCircle size={18} />
           About
-          <Tooltip>About PolyGlot Pro</Tooltip>
-        </HeaderButton>
+        </NavLink>
 
         <HeaderButton
           onClick={handleGithubClick}
