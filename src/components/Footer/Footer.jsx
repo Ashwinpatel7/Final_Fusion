@@ -26,6 +26,16 @@ const FooterContainer = styled.footer`
     height: 1px;
     background: linear-gradient(90deg, transparent, ${({ theme }) => theme.primary}33, transparent);
   }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.2rem 0.75rem;
+    font-size: 0.75rem;
+  }
 `;
 
 const FooterTop = styled.div`
@@ -43,6 +53,14 @@ const FooterSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+
+  @media (max-width: 768px) {
+    min-width: 120px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const FooterTitle = styled.h4`

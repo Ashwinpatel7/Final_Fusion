@@ -25,6 +25,15 @@ const HeaderContainer = styled.header`
   position: relative;
   z-index: 10;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.75rem 0.75rem;
+    flex-wrap: wrap;
+  }
 `;
 
 const LogoContainer = styled(Link)`
@@ -47,7 +56,13 @@ const NavContainer = styled.nav`
   gap: 0.5rem;
 
   @media (max-width: 768px) {
-    display: none;
+    gap: 0.3rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 `;
 
@@ -55,6 +70,15 @@ const ControlsContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    gap: 0.3rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.2rem;
+    margin-left: auto;
+  }
 `;
 
 const NavLink = styled(Link)`
@@ -92,6 +116,21 @@ const NavLink = styled(Link)`
       background-color: white;
       border-radius: 2px;
       box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+    gap: 0.3rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+
+    span {
+      display: none;
     }
   }
 `;
@@ -215,12 +254,12 @@ const Header = () => {
       <ControlsContainer>
         <NavLink to="/help" aria-label="Help">
           <FaQuestionCircle size={18} />
-          Help
+          <span>Help</span>
         </NavLink>
 
         <NavLink to="/about" aria-label="About">
           <FaInfoCircle size={18} />
-          About
+          <span>About</span>
         </NavLink>
 
         <HeaderButton

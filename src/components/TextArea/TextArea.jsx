@@ -18,6 +18,14 @@ const TextAreaContainer = styled.div`
     border-color: ${({ theme }) => theme.primary};
     box-shadow: 0 0 0 2px ${({ theme }) => theme.primary}40;
   }
+
+  @media (max-width: 768px) {
+    min-height: 180px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 150px;
+  }
 `;
 
 const Label = styled.label`
@@ -56,6 +64,16 @@ const StyledTextArea = styled.textarea`
   &:focus {
     outline: none;
   }
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    padding: 2.2rem 0.9rem 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 2rem 0.8rem 1rem;
+  }
 `;
 
 const CharCount = styled.div`
@@ -73,11 +91,11 @@ const CharCountRing = styled.div`
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 2px solid ${({ theme, percentage }) => 
-    percentage > 80 
-      ? theme.danger 
-      : percentage > 60 
-        ? theme.warning 
+  border: 2px solid ${({ theme, percentage }) =>
+    percentage > 80
+      ? theme.danger
+      : percentage > 60
+        ? theme.warning
         : theme.success};
   position: relative;
   display: inline-block;
@@ -91,11 +109,11 @@ const CharCountRing = styled.div`
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: ${({ theme, percentage }) => 
-      percentage > 80 
-        ? theme.danger 
-        : percentage > 60 
-          ? theme.warning 
+    background-color: ${({ theme, percentage }) =>
+      percentage > 80
+        ? theme.danger
+        : percentage > 60
+          ? theme.warning
           : theme.success};
     opacity: ${({ percentage }) => percentage / 100};
   }
@@ -110,11 +128,11 @@ const DetectedLanguage = styled.div`
   font-style: italic;
 `;
 
-const TextArea = ({ 
-  value, 
-  onChange, 
-  label, 
-  placeholder, 
+const TextArea = ({
+  value,
+  onChange,
+  label,
+  placeholder,
   readOnly = false,
   detectedLanguage = null,
   maxLength = 5000
@@ -139,9 +157,9 @@ const TextArea = ({
 
   return (
     <TextAreaContainer>
-      <Label 
+      <Label
         htmlFor={`textarea-${label.replace(/\s+/g, '-').toLowerCase()}`}
-        isFocused={isFocused} 
+        isFocused={isFocused}
         hasValue={value.length > 0}
       >
         {label}

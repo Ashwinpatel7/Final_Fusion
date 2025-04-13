@@ -54,6 +54,14 @@ const Container = styled.div`
   animation: ${fadeIn} 0.6s ease-out;
   position: relative;
 
+  @media (max-width: 768px) {
+    padding: 1.5rem 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem 0;
+  }
+
   &::before {
     content: '';
     position: absolute;
@@ -131,6 +139,16 @@ const TilesGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 `;
 
 const FeatureTile = styled.div`
@@ -180,6 +198,15 @@ const FeatureTile = styled.div`
     opacity: 0;
     transform: translateY(-3px);
     transition: all 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.2rem 1rem;
+    margin-bottom: 0.5rem;
   }
 `;
 

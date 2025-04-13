@@ -32,6 +32,14 @@ const GlobalStyles = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+
+    @media (max-width: 768px) {
+      line-height: 1.4;
+    }
+
+    @media (max-width: 480px) {
+      line-height: 1.3;
+    }
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -42,6 +50,42 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.textColor};
     transition: color var(--animation-speed) var(--animation-curve);
     letter-spacing: -0.02em;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+
+    @media (max-width: 768px) {
+      font-size: 2.2rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.8rem;
+    }
+  }
+
+  h2 {
+    font-size: 2rem;
+
+    @media (max-width: 768px) {
+      font-size: 1.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.5rem;
+
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.2rem;
+    }
   }
 
   h1 {
