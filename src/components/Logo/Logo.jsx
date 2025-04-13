@@ -1,7 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
-import { FaLanguage } from 'react-icons/fa';
+import styled, { keyframes } from 'styled-components';
+import { FaGlobe } from 'react-icons/fa';
 import { APP_NAME, APP_TAGLINE } from '../../utils/constants';
+
+// Animations
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
+
+const rotate = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
 
 const LogoContainer = styled.div`
   display: flex;
@@ -10,19 +22,46 @@ const LogoContainer = styled.div`
 `;
 
 const LogoIcon = styled.div`
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(45deg, ${({ theme }) => theme.primary}, #8ab4f8);
-  border-radius: 12px;
-  padding: 0.3rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  padding: 0.5rem;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  animation: ${pulse} 3s infinite ease-in-out;
+
+  svg {
+    animation: ${rotate} 10s linear infinite;
+    position: relative;
+    z-index: 2;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: rotate(45deg);
+    z-index: 1;
+    transition: all 0.5s ease;
+  }
 
   &:hover {
-    transform: rotate(10deg);
+    transform: rotate(10deg) scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+
+    &::before {
+      transform: rotate(90deg);
+    }
   }
 `;
 
@@ -32,28 +71,37 @@ const LogoText = styled.div`
 `;
 
 const LogoTitle = styled.h1`
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: bold;
   margin: 0;
-  background: linear-gradient(45deg, #fff, #e8f0fe);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  color: white;
   letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  }
 `;
 
 const LogoSubtitle = styled.p`
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   margin: 0;
-  opacity: 0.8;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 300;
 `;
 
 const Logo = () => {
   return (
     <LogoContainer>
       <LogoIcon>
-        <FaLanguage />
+        <FaGlobe />
       </LogoIcon>
       <LogoText>
         <LogoTitle>{APP_NAME}</LogoTitle>

@@ -1,13 +1,14 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
   :root {
-    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-    --animation-speed: 0.3s;
-    --animation-curve: cubic-bezier(0.25, 0.8, 0.25, 1);
+    --font-primary: 'Outfit', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-heading: 'Space Grotesk', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    --animation-speed: 0.2s;
+    --animation-curve: cubic-bezier(0.3, 0, 0.2, 1);
   }
 
   * {
@@ -34,11 +35,13 @@ const GlobalStyles = createGlobalStyle`
   }
 
   h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
     font-weight: 600;
     line-height: 1.3;
     margin-bottom: 0.5em;
     color: ${({ theme }) => theme.textColor};
     transition: color var(--animation-speed) var(--animation-curve);
+    letter-spacing: -0.02em;
   }
 
   h1 {
@@ -78,6 +81,7 @@ const GlobalStyles = createGlobalStyle`
     transition: all var(--animation-speed) var(--animation-curve);
     position: relative;
     overflow: hidden;
+    border-radius: 6px;
   }
 
   input, textarea, select {
@@ -85,7 +89,7 @@ const GlobalStyles = createGlobalStyle`
     font-size: inherit;
     outline: none;
     border: 1px solid ${({ theme }) => theme.borderColor};
-    border-radius: 4px;
+    border-radius: 6px;
     padding: 0.75rem 1rem;
     background-color: ${({ theme }) => theme.inputBg};
     color: ${({ theme }) => theme.textColor};
@@ -93,7 +97,7 @@ const GlobalStyles = createGlobalStyle`
 
     &:focus {
       border-color: ${({ theme }) => theme.primary};
-      box-shadow: 0 0 0 3px ${({ theme }) => theme.primaryOpacity};
+      box-shadow: 0 0 0 2px ${({ theme }) => theme.primaryOpacity};
     }
 
     &::placeholder {
@@ -138,6 +142,12 @@ const GlobalStyles = createGlobalStyle`
 
   ::-webkit-scrollbar-thumb:hover {
     background: ${({ theme }) => theme.primary};
+  }
+
+  /* Focus outline for accessibility */
+  :focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 2px;
   }
 
   /* Animations */

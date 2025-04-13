@@ -8,12 +8,24 @@ import { FaHeart, FaTwitter, FaFacebook, FaLinkedin, FaGlobe, FaBook, FaHeadset,
 const FooterContainer = styled.footer`
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
-  background: ${({ theme }) => theme.footerBg};
-  border-top: 1px solid ${({ theme }) => theme.borderColor};
+  padding: 2rem 1.5rem;
+  background: ${({ theme }) => `linear-gradient(to top, ${theme.darkBg}, transparent)`};
+  border-top: 1px solid ${({ theme }) => `rgba(255, 255, 255, 0.1)`};
   color: ${({ theme }) => theme.secondary};
   font-size: 0.85rem;
   transition: all 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, ${({ theme }) => theme.primary}33, transparent);
+  }
 `;
 
 const FooterTop = styled.div`
@@ -34,19 +46,64 @@ const FooterSection = styled.div`
 `;
 
 const FooterTitle = styled.h4`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.textColor};
-  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: white;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 0.5rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 1rem;
+    background: ${({ theme }) => theme.primary};
+    border-radius: 3px;
+  }
+
+  svg {
+    margin-right: 8px;
+    color: ${({ theme }) => theme.primary};
+  }
 `;
 
 const FooterLink = styled(Link)`
-  color: ${({ theme }) => theme.secondary};
+  color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
+  padding: 0.25rem 0;
+  font-size: 0.85rem;
+  display: block;
+  position: relative;
+  padding-left: 0.5rem;
+
+  &::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    top: 0.25rem;
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: all 0.2s ease;
+  }
 
   &:hover {
-    color: ${({ theme }) => theme.primary};
+    color: white;
     text-decoration: none;
+    transform: translateX(2px);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+
+    &::before {
+      opacity: 1;
+      transform: translateX(0);
+      color: ${({ theme }) => theme.primary};
+    }
   }
 `;
 
@@ -55,7 +112,20 @@ const FooterBottom = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-top: 1.5rem;
-  border-top: 1px solid ${({ theme }) => theme.borderColor};
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.8rem;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  }
 
   @media (max-width: 576px) {
     flex-direction: column;
@@ -69,11 +139,16 @@ const Status = styled.div`
   align-items: center;
   gap: 0.5rem;
   transition: all 0.3s ease;
-  color: ${({ isError, theme }) => isError ? theme.danger : theme.secondary};
+  color: ${({ isError, theme }) => isError ? theme.danger : 'rgba(255, 255, 255, 0.7)'};
   max-width: 70%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  backdrop-filter: blur(5px);
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.75rem;
 `;
 
 const StatusDot = styled.span`
@@ -140,12 +215,47 @@ const SocialLinks = styled.div`
 `;
 
 const SocialLink = styled.a`
-  color: ${({ theme }) => theme.secondary};
-  transition: color 0.2s ease, transform 0.2s ease;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    background: ${({ theme }) => theme.primaryGradient};
+    opacity: 0;
+    transition: all 0.3s ease;
+    transform: scale(0);
+    border-radius: 50%;
+  }
+
+  svg {
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
 
   &:hover {
-    color: ${({ theme }) => theme.primary};
+    color: white;
     transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+
+    &::before {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 `;
 
@@ -153,9 +263,11 @@ const Copyright = styled.div`
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  color: rgba(255, 255, 255, 0.7);
 
   svg {
     color: ${({ theme }) => theme.danger};
+    filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.5));
   }
 `;
 

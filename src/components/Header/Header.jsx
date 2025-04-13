@@ -17,13 +17,14 @@ import { GITHUB_URL } from '../../utils/constants';
 const HeaderContainer = styled.header`
   background: ${({ theme }) => theme.headerBg};
   color: white;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid ${({ theme }) => theme.headerBorder};
   position: relative;
   z-index: 10;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 `;
 
 const LogoContainer = styled(Link)`
@@ -31,10 +32,12 @@ const LogoContainer = styled(Link)`
   color: white;
   display: flex;
   align-items: center;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
 
   &:hover {
     transform: scale(1.02);
+    text-decoration: none;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   }
 `;
 
@@ -58,7 +61,7 @@ const NavLink = styled(Link)`
   color: white;
   text-decoration: none;
   padding: 0.5rem 0.75rem;
-  border-radius: 4px;
+  border-radius: 6px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -68,23 +71,27 @@ const NavLink = styled(Link)`
   font-size: 0.9rem;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.15);
     text-decoration: none;
+    color: white;
+    transform: translateY(-2px);
   }
 
   &.active {
-    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
     font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.2);
 
     &::after {
       content: '';
       position: absolute;
-      bottom: -2px;
-      left: 0.75rem;
-      right: 0.75rem;
+      bottom: -1px;
+      left: 0;
+      right: 0;
       height: 2px;
       background-color: white;
       border-radius: 2px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
     }
   }
 `;
@@ -100,12 +107,14 @@ const HeaderButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   padding: 0.5rem 0.75rem;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: all 0.2s ease;
   position: relative;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    transform: translateY(-2px);
   }
 
   @media (max-width: 576px) {
@@ -120,16 +129,16 @@ const Tooltip = styled.span`
   left: 50%;
   transform: translateX(-50%);
   background-color: ${({ theme }) => theme.darkBg};
-  color: white;
+  color: ${({ theme }) => theme.lightText};
   padding: 0.3rem 0.6rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease;
   z-index: 10;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: ${({ theme }) => theme.boxShadow};
 
   &::before {
     content: '';
@@ -174,13 +183,13 @@ const Header = () => {
   };
 
   const handleHelpClick = () => {
-    // Show help modal or documentation
-    alert('Help functionality will be implemented here');
+    // Navigate to help page
+    window.location.href = '/help';
   };
 
   const handleAboutClick = () => {
-    // Show about modal with app information
-    alert('About functionality will be implemented here');
+    // Navigate to about page
+    window.location.href = '/about';
   };
 
   return (

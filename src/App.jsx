@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
@@ -11,6 +11,12 @@ import LanguageTiles from './components/LanguageTiles/LanguageTiles';
 import TextArea from './components/TextArea/TextArea';
 import ControlButtons from './components/ControlButtons/ControlButtons';
 import Footer from './components/Footer/Footer';
+import ChatBot from './components/ChatBot';
+import IntroAnimation from './components/IntroAnimation';
+import Help from './components/Help';
+import About from './components/About';
+import DocumentTranslation from './components/DocumentTranslation';
+import ImageTranslation from './components/ImageTranslation';
 
 // Redux actions
 import { setInputText } from './store/translationSlice';
@@ -21,12 +27,48 @@ const fadeIn = keyframes`
   to { opacity: 1; }
 `;
 
+const gradientMove = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
 // Styled components
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+  overflow-x: hidden;
+
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${({ theme }) => `linear-gradient(135deg, ${theme.background}, ${theme.darkBg})`};
+    z-index: -2;
+  }
+
+  &::after {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    background: ${({ theme }) => `radial-gradient(circle at 30% 30%, ${theme.primary}05, transparent 20%),
+                                  radial-gradient(circle at 70% 60%, ${theme.purple}05, transparent 20%),
+                                  radial-gradient(circle at 40% 80%, ${theme.info}05, transparent 20%),
+                                  radial-gradient(circle at 80% 10%, ${theme.success}05, transparent 20%)`};
+    z-index: -1;
+    opacity: 0.5;
+    will-change: transform;
+    animation: ${gradientMove} 60s linear infinite;
+  }
 `;
 
 const MainContent = styled.main`
@@ -203,8 +245,27 @@ const TranslationInterface = () => {
 
 // Main App component
 function App() {
+  const [showIntro, setShowIntro] = useState(true);
+  const [hasSeenIntro, setHasSeenIntro] = useState(false);
+
+  // Check if user has seen the intro before
+  useEffect(() => {
+    const introSeen = localStorage.getItem('introSeen');
+    if (introSeen) {
+      setShowIntro(false);
+      setHasSeenIntro(true);
+    }
+  }, []);
+
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+    setHasSeenIntro(true);
+    localStorage.setItem('introSeen', 'true');
+  };
+
   return (
     <ErrorBoundary>
+      {showIntro && !hasSeenIntro && <IntroAnimation onComplete={handleIntroComplete} />}
       <Router>
         <AppContainer>
           <Header />
@@ -213,10 +274,15 @@ function App() {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/translate" element={<TranslationInterface />} />
             <Route path="/translate/:mode" element={<TranslationInterface />} />
+            <Route path="/document" element={<DocumentTranslation />} />
+            <Route path="/image" element={<ImageTranslation />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/about" element={<About />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
 
           <Footer />
+          <ChatBot />
         </AppContainer>
       </Router>
     </ErrorBoundary>
