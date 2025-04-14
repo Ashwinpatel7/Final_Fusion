@@ -18,6 +18,7 @@ import imageA from '../../assets/a.jpeg';
 import imageB from '../../assets/b.jpeg';
 import imageC from '../../assets/c.jpeg';
 import imageD from '../../assets/d.jpeg';
+import imageE from '../../assets/e.jpeg';
 
 // Animations
 const fadeIn = keyframes`
@@ -161,36 +162,20 @@ const MissionText = styled.p`
 
 const MissionImage = styled.div`
   position: relative;
-  height: 400px;
+  width: 100%;
+  height: auto;
   border-radius: 20px;
   overflow: hidden;
-  background: ${({ theme }) => theme.primaryGradient};
   box-shadow: ${({ theme }) => theme.cardShadow};
   animation: ${fadeIn} 0.6s ease-out;
   animation-delay: 0.4s;
   opacity: 0;
   animation-fill-mode: forwards;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
-    opacity: 0.7;
-    mix-blend-mode: overlay;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, ${({ theme }) => theme.primary}33, transparent);
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 `;
 
@@ -539,25 +524,27 @@ const About = () => {
         </GlobeIcon>
         <Title>About {APP_NAME}</Title>
         <Subtitle>
-          {APP_TAGLINE}. We're on a mission to make communication seamless across languages and cultures.
+          {APP_TAGLINE}. A final year engineering project designed to break language barriers and facilitate global communication.
         </Subtitle>
       </HeroSection>
 
       <MissionSection>
         <MissionContent>
-          <MissionTitle>Our Mission</MissionTitle>
+          <MissionTitle>Our Project</MissionTitle>
           <MissionText>
-            At {APP_NAME}, we believe that language should never be a barrier to understanding, connection, or opportunity. Our mission is to create technology that breaks down these barriers and brings people together across languages and cultures.
+            {APP_NAME} is our final year engineering project at Bharati Vidyapeeth College of Engineering, developed under the guidance of Prof. Shankar Madkar. We set out to create a comprehensive language translation tool that addresses real-world communication challenges.
           </MissionText>
           <MissionText>
-            Founded in 2023, we've been at the forefront of translation technology, combining cutting-edge AI with a deep understanding of linguistics to create tools that make communication seamless and natural.
+            As a team of passionate engineering students, we've combined our knowledge of React, machine learning, and natural language processing to build this application. Our goal was to apply theoretical concepts learned throughout our academic journey to create something practical and impactful.
           </MissionText>
           <MissionText>
-            Whether you're connecting with friends around the world, conducting business internationally, or exploring content in other languages, we're here to make the world feel a little smaller and a lot more accessible.
+            This project represents the culmination of our undergraduate studies, showcasing our technical skills, teamwork, and problem-solving abilities. We hope that {APP_NAME} demonstrates our readiness to transition from academic learning to professional application development.
           </MissionText>
         </MissionContent>
 
-        <MissionImage />
+        <MissionImage>
+          <img src={imageE} alt="Mission illustration" />
+        </MissionImage>
       </MissionSection>
 
       <FeaturesSection>
@@ -597,15 +584,15 @@ const About = () => {
       </TeamSection>
 
       <CTASection>
-        <CTATitle>Ready to Break Language Barriers?</CTATitle>
+        <CTATitle>Explore Our Final Year Project</CTATitle>
         <CTADescription>
-          Join millions of users worldwide who are using {APP_NAME} to communicate across languages and cultures.
+          {APP_NAME} showcases our engineering skills and passion for solving real-world problems. We welcome feedback from professors, peers, and potential employers!
         </CTADescription>
         <CTAButton to="/translate">
-          Start Translating Now <FaArrowRight />
+          Try Our Translator <FaArrowRight />
         </CTAButton>
         <CTALink href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-          <FaGithub /> View on GitHub
+          <FaGithub /> View Source Code
         </CTALink>
       </CTASection>
     </AboutContainer>
