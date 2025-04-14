@@ -13,6 +13,11 @@ import {
   FaBookmark
 } from 'react-icons/fa';
 
+// Import activity components
+import RecentActivity from '../RecentActivity';
+import SavedPhrases from '../SavedPhrases';
+import TranslationHistory from '../TranslationHistory';
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -448,13 +453,9 @@ const HomeScreen = ({ onSelectMode }) => {
       </TilesGrid>
 
       <RecentActivitySection>
-        <SectionTitle>Recent Activity</SectionTitle>
-        <EmptyState>
-          <IconWrapper color="#9aa0a6">
-            <FaHistory />
-          </IconWrapper>
-          <p>Your recent translations will appear here</p>
-        </EmptyState>
+        <RecentActivity />
+        <TranslationHistory />
+        <SavedPhrases />
       </RecentActivitySection>
     </Container>
   );

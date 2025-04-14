@@ -17,6 +17,9 @@ import Help from './components/Help';
 import About from './components/About';
 import DocumentTranslation from './components/DocumentTranslation';
 import ImageTranslation from './components/ImageTranslation';
+import RecentActivity from './components/RecentActivity';
+import SavedPhrases from './components/SavedPhrases';
+import TranslationHistory from './components/TranslationHistory';
 
 // Redux actions
 import { setInputText } from './store/translationSlice';
@@ -239,6 +242,10 @@ const TranslationInterface = () => {
       </TextAreasContainer>
 
       <ControlButtons />
+
+      <RecentActivity />
+      <TranslationHistory />
+      <SavedPhrases />
     </MainContent>
   );
 };

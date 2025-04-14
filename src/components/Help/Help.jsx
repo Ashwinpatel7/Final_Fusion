@@ -12,8 +12,7 @@ import {
   FaSearch,
   FaArrowRight,
   FaGithub,
-  FaBug,
-  FaEnvelope
+  FaBug
 } from 'react-icons/fa';
 import { APP_NAME, GITHUB_URL, SUPPORT_EMAIL } from '../../utils/constants';
 

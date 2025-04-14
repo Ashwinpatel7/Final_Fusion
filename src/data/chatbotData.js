@@ -82,6 +82,11 @@ export const predefinedQA = [
     question: "Who are your creators ",
     answer: "A bunch of misfits named a cute little girl Anshita Madam and two simple boys ashwin and ritesh"
   },
+  {
+    id: 17,
+    question: "Who is your mentor ",
+    answer: "My mentor is Shankar Madkar Sir"
+  },
 ];
 
 /**

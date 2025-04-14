@@ -383,7 +383,7 @@ const Footer = () => {
         </Status>
 
         <Copyright>
-          © {currentYear} {APP_NAME}. Made with <FaHeart /> by Augment Code
+          © {currentYear} {APP_NAME}. Made with <FaHeart /> by Ashwin Patel
         </Copyright>
 
         <div>
