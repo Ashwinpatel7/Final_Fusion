@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { 
-  FaQuestionCircle, 
-  FaBook, 
-  FaVideo, 
-  FaHeadset, 
-  FaLightbulb, 
-  FaChevronDown, 
+import {
+  FaQuestionCircle,
+  FaBook,
+  FaVideo,
+  FaHeadset,
+  FaLightbulb,
+  FaChevronDown,
   FaChevronUp,
   FaSearch,
-  FaArrowRight
+  FaArrowRight,
+  FaGithub,
+  FaBug,
+  FaEnvelope
 } from 'react-icons/fa';
-import { APP_NAME } from '../../utils/constants';
+import { APP_NAME, GITHUB_URL, SUPPORT_EMAIL } from '../../utils/constants';
 
 // Animations
 const fadeIn = keyframes`
@@ -43,7 +46,7 @@ const HelpHeader = styled.div`
   text-align: center;
   margin-bottom: 3rem;
   position: relative;
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -93,13 +96,13 @@ const SearchInput = styled.input`
   color: ${({ theme }) => theme.textColor};
   font-size: 1.1rem;
   transition: all 0.3s ease;
-  
+
   &:focus {
     outline: none;
     box-shadow: 0 0 0 3px ${({ theme }) => theme.primaryOpacity};
     border-color: ${({ theme }) => theme.primary};
   }
-  
+
   &::placeholder {
     color: ${({ theme }) => theme.secondary};
   }
@@ -130,18 +133,18 @@ const HelpCard = styled.div`
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: ${({ theme }) => theme.neonGlow}, ${({ theme }) => theme.cardShadow};
     border-color: ${({ theme }) => theme.primary};
-    
+
     svg {
       animation: ${float} 3s infinite ease-in-out;
       color: ${({ theme }) => theme.primary};
     }
   }
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -153,7 +156,7 @@ const HelpCard = styled.div`
     opacity: 0;
     transition: all 0.3s ease;
   }
-  
+
   &:hover::before {
     opacity: 1;
   }
@@ -168,7 +171,7 @@ const CardIcon = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  
+
   svg {
     font-size: 1.8rem;
     color: ${({ theme }) => theme.primary};
@@ -195,7 +198,7 @@ const CardLink = styled(Link)`
   color: ${({ theme }) => theme.primary};
   font-weight: 500;
   transition: all 0.3s ease;
-  
+
   &:hover {
     transform: translateX(5px);
     text-decoration: none;
@@ -211,7 +214,7 @@ const FAQTitle = styled.h2`
   margin-bottom: 2rem;
   text-align: center;
   position: relative;
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -231,7 +234,7 @@ const FAQItem = styled.div`
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
-  
+
   &:hover {
     border-color: ${({ theme }) => theme.primary}33;
   }
@@ -245,7 +248,7 @@ const FAQQuestion = styled.div`
   cursor: pointer;
   background: rgba(255, 255, 255, 0.03);
   transition: all 0.3s ease;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.05);
   }
@@ -263,7 +266,7 @@ const FAQAnswer = styled.div`
   overflow: hidden;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   background: rgba(0, 0, 0, 0.1);
-  
+
   p {
     padding: 1.5rem 0;
     margin: 0;
@@ -300,7 +303,7 @@ const ContactButton = styled.a`
   font-weight: 600;
   transition: all 0.3s ease;
   text-decoration: none;
-  
+
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
@@ -335,15 +338,15 @@ const faqData = [
 const Help = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
-  
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
-  
+
   return (
     <HelpContainer>
       <HelpHeader>
@@ -352,19 +355,19 @@ const Help = () => {
           Find answers to common questions and learn how to make the most of {APP_NAME}
         </Subtitle>
       </HelpHeader>
-      
+
       <SearchContainer>
         <SearchIcon>
           <FaSearch />
         </SearchIcon>
-        <SearchInput 
-          type="text" 
-          placeholder="Search for help topics..." 
+        <SearchInput
+          type="text"
+          placeholder="Search for help topics..."
           value={searchQuery}
           onChange={handleSearchChange}
         />
       </SearchContainer>
-      
+
       <HelpGrid>
         <HelpCard>
           <CardIcon>
@@ -378,7 +381,7 @@ const Help = () => {
             Browse Documentation <FaArrowRight />
           </CardLink>
         </HelpCard>
-        
+
         <HelpCard>
           <CardIcon>
             <FaVideo />
@@ -391,7 +394,7 @@ const Help = () => {
             Watch Tutorials <FaArrowRight />
           </CardLink>
         </HelpCard>
-        
+
         <HelpCard>
           <CardIcon>
             <FaLightbulb />
@@ -404,7 +407,7 @@ const Help = () => {
             View Tips <FaArrowRight />
           </CardLink>
         </HelpCard>
-        
+
         <HelpCard>
           <CardIcon>
             <FaHeadset />
@@ -417,11 +420,37 @@ const Help = () => {
             Contact Support <FaArrowRight />
           </CardLink>
         </HelpCard>
+
+        <HelpCard>
+          <CardIcon>
+            <FaGithub />
+          </CardIcon>
+          <CardTitle>GitHub Repository</CardTitle>
+          <CardDescription>
+            Access our source code, report issues, or contribute to the project on GitHub.
+          </CardDescription>
+          <CardLink as="a" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+            View on GitHub <FaArrowRight />
+          </CardLink>
+        </HelpCard>
+
+        <HelpCard>
+          <CardIcon>
+            <FaBug />
+          </CardIcon>
+          <CardTitle>Report an Issue</CardTitle>
+          <CardDescription>
+            Found a bug or have a suggestion? Let us know so we can improve the application.
+          </CardDescription>
+          <CardLink as="a" href={`mailto:${SUPPORT_EMAIL}?subject=Issue Report: Final Fusion Translator&body=Issue Description:%0A%0ASteps to Reproduce:%0A%0AExpected Behavior:%0A%0AActual Behavior:%0A%0ABrowser/Device Information:%0A`} target="_blank" rel="noopener noreferrer">
+            Report Issue <FaArrowRight />
+          </CardLink>
+        </HelpCard>
       </HelpGrid>
-      
+
       <FAQSection>
         <FAQTitle>Frequently Asked Questions</FAQTitle>
-        
+
         {faqData.map((faq, index) => (
           <FAQItem key={index}>
             <FAQQuestion onClick={() => toggleFAQ(index)}>
@@ -434,13 +463,13 @@ const Help = () => {
           </FAQItem>
         ))}
       </FAQSection>
-      
+
       <ContactSection>
         <ContactTitle>Still Need Help?</ContactTitle>
         <ContactDescription>
           If you couldn't find what you're looking for, our support team is always ready to help you with any questions or issues.
         </ContactDescription>
-        <ContactButton href="mailto:support@finalfusiontranslator.com">
+        <ContactButton href={`mailto:${SUPPORT_EMAIL}`}>
           <FaHeadset /> Contact Support
         </ContactButton>
       </ContactSection>

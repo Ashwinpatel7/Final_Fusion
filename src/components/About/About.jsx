@@ -12,7 +12,7 @@ import {
   FaCheck,
   FaUserTie
 } from 'react-icons/fa';
-import { APP_NAME, APP_TAGLINE } from '../../utils/constants';
+import { APP_NAME, APP_TAGLINE, GITHUB_URL } from '../../utils/constants';
 
 // Import team member images
 import imageA from '../../assets/a.jpeg';
@@ -436,10 +436,33 @@ const CTAButton = styled(Link)`
   font-weight: 600;
   transition: all 0.3s ease;
   text-decoration: none;
+  margin-right: 1rem;
 
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    text-decoration: none;
+  }
+`;
+
+const CTALink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: ${({ theme }) => theme.textColor};
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  &:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.primary};
     text-decoration: none;
   }
 `;
@@ -581,6 +604,9 @@ const About = () => {
         <CTAButton to="/translate">
           Start Translating Now <FaArrowRight />
         </CTAButton>
+        <CTALink href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+          <FaGithub /> View on GitHub
+        </CTALink>
       </CTASection>
     </AboutContainer>
   );

@@ -33,7 +33,8 @@ export const APP_VERSION = '1.0.0';
 export const APP_NAME = 'Final Fusion Translator';
 export const APP_TAGLINE = 'Breaking Language Barriers Seamlessly';
 
-export const GITHUB_URL = 'https://github.com';
+export const GITHUB_URL = 'https://github.com/Ashwinpatel7/Final_Fusion';
+export const SUPPORT_EMAIL = 'ashwinpatel7677@gmail.com';
 
 // Cache settings
 export const CACHE_SIZE = 100;

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { APP_VERSION, APP_NAME } from '../../utils/constants';
-import { FaHeart, FaTwitter, FaFacebook, FaLinkedin, FaGlobe, FaBook, FaHeadset, FaShieldAlt } from 'react-icons/fa';
+import { APP_VERSION, APP_NAME, GITHUB_URL, SUPPORT_EMAIL } from '../../utils/constants';
+import { FaHeart, FaTwitter, FaFacebook, FaLinkedin, FaGlobe, FaBook, FaHeadset, FaShieldAlt, FaGithub, FaBug } from 'react-icons/fa';
 
 const FooterContainer = styled.footer`
   display: flex;
@@ -333,7 +333,10 @@ const Footer = () => {
           <FooterLink to="/about">Our Mission</FooterLink>
           <FooterLink to="/blog">Translation Blog</FooterLink>
           <FooterLink to="/careers">Join Our Team</FooterLink>
-          <FooterLink to="/contact">Contact Us</FooterLink>
+          <FooterLink as="a" href={`mailto:${SUPPORT_EMAIL}`}>Contact Us</FooterLink>
+          <FooterLink as="a" href={`mailto:${SUPPORT_EMAIL}?subject=Issue Report: Final Fusion Translator&body=Issue Description:%0A%0ASteps to Reproduce:%0A%0AExpected Behavior:%0A%0AActual Behavior:%0A%0ABrowser/Device Information:%0A`}>
+            <FaBug style={{ marginRight: '5px' }} /> Report an Issue
+          </FooterLink>
         </FooterSection>
 
         <FooterSection>
@@ -385,6 +388,9 @@ const Footer = () => {
 
         <div>
           <SocialLinks>
+            <SocialLink href={GITHUB_URL} target="_blank" aria-label="GitHub">
+              <FaGithub size={18} />
+            </SocialLink>
             <SocialLink href="https://twitter.com" target="_blank" aria-label="Twitter">
               <FaTwitter size={18} />
             </SocialLink>
