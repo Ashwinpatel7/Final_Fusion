@@ -5,12 +5,12 @@ import GlobalStyles from '../styles/GlobalStyles';
 
 // Create theme context
 export const ThemeContext = createContext({
-  theme: 'light',
+  theme: 'dark',
   toggleTheme: () => {},
 });
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
 
   // Load theme from localStorage on initial render
   useEffect(() => {
