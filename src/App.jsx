@@ -288,6 +288,7 @@ function App() {
             <Route path="/image" element={<ImageTranslation />} />
             <Route path="/help" element={<Help />} />
             <Route path="/about" element={<About />} />
+            <Route path="/achievements" element={<Gamification />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
 

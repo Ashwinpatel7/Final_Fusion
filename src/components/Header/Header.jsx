@@ -10,7 +10,8 @@ import {
   FaHome,
   FaLanguage,
   FaHistory,
-  FaBookmark
+  FaBookmark,
+  FaTrophy
 } from 'react-icons/fa';
 import { GITHUB_URL } from '../../utils/constants';
 
@@ -248,6 +249,11 @@ const Header = () => {
         <NavLink to="/saved" className={isActive('/saved') ? 'active' : ''}>
           <FaBookmark />
           Saved
+        </NavLink>
+
+        <NavLink to="/achievements" className={isActive('/achievements') ? 'active' : ''}>
+          <FaTrophy />
+          Achievements
         </NavLink>
       </NavContainer>
 

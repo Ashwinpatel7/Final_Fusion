@@ -454,10 +454,10 @@ const HomeScreen = ({ onSelectMode }) => {
       </TilesGrid>
 
       <RecentActivitySection>
+        <Gamification />
         <RecentActivity />
         <TranslationHistory />
         <SavedPhrases />
-        <Gamification />
       </RecentActivitySection>
     </Container>
   );

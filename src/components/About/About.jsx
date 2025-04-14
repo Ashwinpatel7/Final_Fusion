@@ -9,8 +9,7 @@ import {
   FaShieldAlt,
   FaChartLine,
   FaArrowRight,
-  FaCheck,
-  FaUserTie
+  FaGithub
 } from 'react-icons/fa';
 import { APP_NAME, APP_TAGLINE, GITHUB_URL } from '../../utils/constants';
 
@@ -18,6 +17,7 @@ import { APP_NAME, APP_TAGLINE, GITHUB_URL } from '../../utils/constants';
 import imageA from '../../assets/a.jpeg';
 import imageB from '../../assets/b.jpeg';
 import imageC from '../../assets/c.jpeg';
+import imageD from '../../assets/d.jpeg';
 
 // Animations
 const fadeIn = keyframes`
@@ -525,7 +525,7 @@ const team = [
     name: "Prof. Shankar Madkar",
     role: "Project Guide",
     bio: "Prof. Madkar provides guidance and mentorship to the team throughout the development process. His expertise in language processing and web technologies has been invaluable to the project's success.",
-    avatar: "https://randomuser.me/api/portraits/men/41.jpg", // Using a placeholder image for the professor
+    avatar: imageD, // Using the imported image D for the professor
     isGuide: true
   }
 ];
