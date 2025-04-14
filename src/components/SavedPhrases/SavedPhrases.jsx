@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { FaBookmark, FaArrowRight, FaStar, FaRegStar, FaTrash, FaCopy } from 'react-icons/fa';
 
 // Animations
@@ -53,7 +53,7 @@ const Title = styled.h2`
   display: flex;
   align-items: center;
   color: ${({ theme }) => theme.textColor};
-  
+
   svg {
     margin-right: 0.75rem;
     color: ${({ theme }) => theme.primary};
@@ -73,8 +73,8 @@ const PhraseItem = styled.div`
   border-left: 4px solid ${({ theme }) => theme.primary};
   position: absolute;
   width: calc(100% - 2rem);
-  animation: ${({ isEntering }) => isEntering ? slideIn : slideOut} 0.5s ease-out forwards;
-  
+  animation: ${({ isEntering }) => isEntering ? css`${slideIn} 0.5s ease-out forwards` : css`${slideOut} 0.5s ease-out forwards`};
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -111,32 +111,32 @@ const ActionButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   &:hover {
     color: ${({ theme }) => theme.primary};
     background: ${({ theme }) => theme.primary}15;
   }
-  
+
   &.favorite {
     color: ${({ isFavorite, theme }) => isFavorite ? '#f59e0b' : theme.secondary};
-    
+
     &:hover {
       color: #f59e0b;
     }
   }
-  
+
   &.delete:hover {
     color: #ef4444;
     background: #ef444415;
   }
-  
+
   &.copy:hover {
     color: #10b981;
     background: #10b98115;
   }
-  
+
   &.active {
-    animation: ${pulse} 0.3s ease-in-out;
+    animation: ${css`${pulse} 0.3s ease-in-out`};
   }
 `;
 
@@ -184,11 +184,11 @@ const ViewAllButton = styled.button`
   padding: 0.5rem;
   border-radius: 4px;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: ${({ theme }) => theme.primary}15;
   }
-  
+
   svg {
     margin-left: 0.5rem;
     font-size: 0.8rem;
@@ -259,37 +259,37 @@ const SavedPhrases = () => {
       return acc;
     }, {})
   );
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setIsEntering(false);
-      
+
       setTimeout(() => {
         setCurrentPhraseIndex((prevIndex) => (prevIndex + 1) % savedPhrases.length);
         setIsEntering(true);
       }, 500); // Wait for slide out animation to complete
-      
+
     }, 6000); // Change phrase every 6 seconds
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   useEffect(() => {
     setVisiblePhrase(savedPhrases[currentPhraseIndex]);
   }, [currentPhraseIndex]);
-  
+
   const toggleFavorite = (id) => {
     setFavorites(prev => ({
       ...prev,
       [id]: !prev[id]
     }));
   };
-  
+
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     // You could add a toast notification here
   };
-  
+
   return (
     <SavedPhrasesContainer>
       <Title>
@@ -298,23 +298,23 @@ const SavedPhrases = () => {
           View All <FaArrowRight />
         </ViewAllButton>
       </Title>
-      
+
       <PhrasesList>
-        <PhraseItem 
-          key={visiblePhrase.id} 
+        <PhraseItem
+          key={visiblePhrase.id}
           isEntering={isEntering}
         >
           <PhraseHeader>
             <PhraseTitle>{visiblePhrase.title}</PhraseTitle>
             <PhraseActions>
-              <ActionButton 
+              <ActionButton
                 className="favorite"
                 isFavorite={favorites[visiblePhrase.id]}
                 onClick={() => toggleFavorite(visiblePhrase.id)}
               >
                 {favorites[visiblePhrase.id] ? <FaStar /> : <FaRegStar />}
               </ActionButton>
-              <ActionButton 
+              <ActionButton
                 className="copy"
                 onClick={() => copyToClipboard(visiblePhrase.text)}
               >
@@ -325,12 +325,12 @@ const SavedPhrases = () => {
               </ActionButton>
             </PhraseActions>
           </PhraseHeader>
-          
+
           <PhraseContent>
             <PhraseText>{visiblePhrase.text}</PhraseText>
             <PhraseTranslation>{visiblePhrase.translation}</PhraseTranslation>
           </PhraseContent>
-          
+
           <PhraseFooter>
             <PhraseLanguages>
               {visiblePhrase.sourceLanguage} → {visiblePhrase.targetLanguage}

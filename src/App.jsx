@@ -20,6 +20,8 @@ import ImageTranslation from './components/ImageTranslation';
 import RecentActivity from './components/RecentActivity';
 import SavedPhrases from './components/SavedPhrases';
 import TranslationHistory from './components/TranslationHistory';
+import QuickTranslate from './components/QuickTranslate';
+import Gamification from './components/Gamification';
 
 // Redux actions
 import { setInputText } from './store/translationSlice';
@@ -243,6 +245,7 @@ const TranslationInterface = () => {
 
       <ControlButtons />
 
+      <Gamification />
       <RecentActivity />
       <TranslationHistory />
       <SavedPhrases />
@@ -290,6 +293,7 @@ function App() {
 
           <Footer />
           <ChatBot />
+          <QuickTranslate />
         </AppContainer>
       </Router>
     </ErrorBoundary>

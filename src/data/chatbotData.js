@@ -85,7 +85,7 @@ export const predefinedQA = [
   {
     id: 17,
     question: "Who is your mentor ",
-    answer: "My mentor is Shankar Madkar Sir"
+    answer: "Our mentor is Shankar Madkar Sir"
   },
 ];
 

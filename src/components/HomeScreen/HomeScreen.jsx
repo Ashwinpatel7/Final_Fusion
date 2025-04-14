@@ -17,6 +17,7 @@ import {
 import RecentActivity from '../RecentActivity';
 import SavedPhrases from '../SavedPhrases';
 import TranslationHistory from '../TranslationHistory';
+import Gamification from '../Gamification';
 
 const fadeIn = keyframes`
   from {
@@ -456,6 +457,7 @@ const HomeScreen = ({ onSelectMode }) => {
         <RecentActivity />
         <TranslationHistory />
         <SavedPhrases />
+        <Gamification />
       </RecentActivitySection>
     </Container>
   );

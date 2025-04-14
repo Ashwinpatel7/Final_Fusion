@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { FaHistory, FaArrowRight, FaLanguage, FaFileAlt, FaImage, FaMicrophone, FaTrash, FaSave, FaCopy } from 'react-icons/fa';
 
 // Animations
@@ -47,7 +47,7 @@ const Title = styled.h2`
   display: flex;
   align-items: center;
   color: ${({ theme }) => theme.textColor};
-  
+
   svg {
     margin-right: 0.75rem;
     color: ${({ theme }) => theme.primary};
@@ -67,8 +67,8 @@ const HistoryItem = styled.div`
   border-left: 4px solid ${({ color }) => color || '#6366f1'};
   position: absolute;
   width: calc(100% - 2rem);
-  animation: ${({ isEntering }) => isEntering ? slideIn : slideOut} 0.5s ease-out forwards;
-  
+  animation: ${({ isEntering }) => isEntering ? css`${slideIn} 0.5s ease-out forwards` : css`${slideOut} 0.5s ease-out forwards`};
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -91,7 +91,7 @@ const HistoryIcon = styled.div`
   justify-content: center;
   margin-right: 1rem;
   flex-shrink: 0;
-  
+
   svg {
     color: white;
     font-size: 1.2rem;
@@ -160,21 +160,21 @@ const ActionButton = styled.button`
   align-items: center;
   justify-content: center;
   font-size: 0.8rem;
-  
+
   svg {
     margin-right: 0.25rem;
   }
-  
+
   &:hover {
     color: ${({ theme }) => theme.primary};
     background: ${({ theme }) => theme.primary}15;
   }
-  
+
   &.save:hover {
     color: #10b981;
     background: #10b98115;
   }
-  
+
   &.delete:hover {
     color: #ef4444;
     background: #ef444415;
@@ -194,11 +194,11 @@ const ViewAllButton = styled.button`
   padding: 0.5rem;
   border-radius: 4px;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: ${({ theme }) => theme.primary}15;
   }
-  
+
   svg {
     margin-left: 0.5rem;
     font-size: 0.8rem;
@@ -273,30 +273,30 @@ const TranslationHistory = () => {
   const [currentHistoryIndex, setCurrentHistoryIndex] = useState(0);
   const [isEntering, setIsEntering] = useState(true);
   const [visibleHistory, setVisibleHistory] = useState(historyItems[0]);
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setIsEntering(false);
-      
+
       setTimeout(() => {
         setCurrentHistoryIndex((prevIndex) => (prevIndex + 1) % historyItems.length);
         setIsEntering(true);
       }, 500); // Wait for slide out animation to complete
-      
+
     }, 7000); // Change history item every 7 seconds
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   useEffect(() => {
     setVisibleHistory(historyItems[currentHistoryIndex]);
   }, [currentHistoryIndex]);
-  
+
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     // You could add a toast notification here
   };
-  
+
   return (
     <HistoryContainer>
       <Title>
@@ -305,10 +305,10 @@ const TranslationHistory = () => {
           View All <FaArrowRight />
         </ViewAllButton>
       </Title>
-      
+
       <HistoryList>
-        <HistoryItem 
-          key={visibleHistory.id} 
+        <HistoryItem
+          key={visibleHistory.id}
           color={visibleHistory.color}
           isEntering={isEntering}
         >
@@ -324,12 +324,12 @@ const TranslationHistory = () => {
             </HistoryInfo>
             <HistoryTime>{visibleHistory.time}</HistoryTime>
           </HistoryHeader>
-          
+
           <HistoryContent>
             <SourceText>{visibleHistory.sourceText}</SourceText>
             <TranslatedText>{visibleHistory.translatedText}</TranslatedText>
           </HistoryContent>
-          
+
           <HistoryActions>
             <ActionButton onClick={() => copyToClipboard(visibleHistory.translatedText)}>
               <FaCopy /> Copy

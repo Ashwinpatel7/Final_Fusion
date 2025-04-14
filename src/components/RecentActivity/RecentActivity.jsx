@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { FaHistory, FaArrowRight, FaLanguage, FaFileAlt, FaImage, FaMicrophone } from 'react-icons/fa';
 
 // Animations
@@ -47,7 +47,7 @@ const Title = styled.h2`
   display: flex;
   align-items: center;
   color: ${({ theme }) => theme.textColor};
-  
+
   svg {
     margin-right: 0.75rem;
     color: ${({ theme }) => theme.primary};
@@ -69,8 +69,8 @@ const ActivityItem = styled.div`
   border-left: 4px solid ${({ color }) => color || '#6366f1'};
   position: absolute;
   width: calc(100% - 2rem);
-  animation: ${({ isEntering }) => isEntering ? slideIn : slideOut} 0.5s ease-out forwards;
-  
+  animation: ${({ isEntering }) => isEntering ? css`${slideIn} 0.5s ease-out forwards` : css`${slideOut} 0.5s ease-out forwards`};
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -87,7 +87,7 @@ const ActivityIcon = styled.div`
   justify-content: center;
   margin-right: 1rem;
   flex-shrink: 0;
-  
+
   svg {
     color: white;
     font-size: 1.2rem;
@@ -136,11 +136,11 @@ const ViewAllButton = styled.button`
   padding: 0.5rem;
   border-radius: 4px;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: ${({ theme }) => theme.primary}15;
   }
-  
+
   svg {
     margin-left: 0.5rem;
     font-size: 0.8rem;
@@ -210,25 +210,25 @@ const RecentActivity = () => {
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const [isEntering, setIsEntering] = useState(true);
   const [visibleActivity, setVisibleActivity] = useState(recentActivities[0]);
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setIsEntering(false);
-      
+
       setTimeout(() => {
         setCurrentActivityIndex((prevIndex) => (prevIndex + 1) % recentActivities.length);
         setIsEntering(true);
       }, 500); // Wait for slide out animation to complete
-      
+
     }, 5000); // Change activity every 5 seconds
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   useEffect(() => {
     setVisibleActivity(recentActivities[currentActivityIndex]);
   }, [currentActivityIndex]);
-  
+
   return (
     <RecentActivityContainer>
       <Title>
@@ -237,10 +237,10 @@ const RecentActivity = () => {
           View All <FaArrowRight />
         </ViewAllButton>
       </Title>
-      
+
       <ActivityList>
-        <ActivityItem 
-          key={visibleActivity.id} 
+        <ActivityItem
+          key={visibleActivity.id}
           color={visibleActivity.color}
           isEntering={isEntering}
         >
