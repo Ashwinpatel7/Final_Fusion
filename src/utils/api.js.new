@@ -1,7 +1,5 @@
-import { CACHE_SIZE } from './constants';
+import { CACHE_SIZE, LANGUAGE_CODES } from './constants';
 import { improvedTranslate } from './improvedTranslation';
-import { translateWithAPI } from './translationAPI';
-import { getLanguageCode } from './supportedLanguages';
 
 // Simple in-memory cache
 const cache = new Map();
@@ -45,57 +43,23 @@ export const translateText = async (text, source, target) => {
 
   // Check cache first
   if (cache.has(cacheKey)) {
-    console.log('Translation found in cache, returning cached result');
     return cache.get(cacheKey);
   }
 
   try {
-    console.log(`Translation requested for text: "${text}"`);
-    console.log(`Source language: ${source}, Target language: ${target}`);
+    // In a real application, you would use a proper translation API
+    // For this demo, we'll use a more sophisticated mock implementation
 
-    // Always use the Microsoft Translator API directly
-    const apiResult = await translateWithAPI(text, source, target);
-
-    // Check if there was an error in the translation
-    if (apiResult.error) {
-      console.warn('Translation API returned an error, using fallback');
-
-      // Try to use the improved translation as a fallback
-      const fallbackResult = {
-        text: improvedTranslate(text, target),
-        source: source,
-        isMock: true
-      };
-
-      // Add to cache
-      addToCache(cacheKey, fallbackResult);
-
-      return fallbackResult;
-    }
-
-    console.log(`API translation successful: "${apiResult.text}"`);
+    // Simulate API call with a delay
+    const result = await mockTranslateAPI(text, source, target);
 
     // Add to cache
-    addToCache(cacheKey, apiResult);
+    addToCache(cacheKey, result);
 
-    return apiResult;
+    return result;
   } catch (error) {
     console.error('Translation error:', error);
-
-    // For debugging purposes, log the full error
-    console.error('Full error object:', error);
-
-    // Use the improved translation as a fallback
-    const fallbackResult = {
-      text: improvedTranslate(text, target),
-      source: source,
-      isMock: true
-    };
-
-    // Add to cache
-    addToCache(cacheKey, fallbackResult);
-
-    return fallbackResult;
+    throw new Error(`Translation failed: ${error.message}`);
   }
 };
 
@@ -165,50 +129,24 @@ const commonWords = {
  * @param {string} target - Target language code
  * @returns {Promise<Object>} - Translation result
  */
-const mockTranslateAPI = async (text, source, target) => {
-  return new Promise(async (resolve) => {
-    // Add a small delay to simulate network latency
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-    await delay(300);
+const mockTranslateAPI = (text, source, target) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // Detect language if source is 'auto'
+      const detectedSource = source === 'auto' ? detectLanguage(text) : source;
 
-    // Detect language if source is 'auto'
-    const detectedSource = source === 'auto' ? detectLanguage(text) : source;
+      // Get language code from language name if needed
+      const sourceCode = LANGUAGE_CODES[detectedSource] || detectedSource;
+      const targetCode = LANGUAGE_CODES[target] || target;
 
-    // Get language code from language name if needed
-    const sourceCode = source === 'auto' ? 'auto' : getLanguageCode(detectedSource) || source;
-    const targetCode = getLanguageCode(target) || target;
+      // Use the improved translation function
+      const translatedText = improvedTranslate(text, targetCode);
 
-    // Always try to use the Microsoft Translator API first
-    try {
-      console.log(`Attempting to translate with Microsoft API:
-        - Source: ${sourceCode} (${detectedSource})
-        - Target: ${targetCode}
-        - Text: "${text.substring(0, 50)}${text.length > 50 ? '...' : ''}"`);
-
-      const apiResult = await translateWithAPI(text, sourceCode, targetCode);
-
-      // If we got a valid result from the API, use it
-      if (apiResult) {
-        console.log('Successfully translated with Microsoft API');
-        resolve(apiResult);
-        return;
-      } else {
-        console.warn('API returned null result, falling back to mock translation');
-      }
-    } catch (error) {
-      console.error('Translation API failed with error:', error);
-      console.warn('Falling back to mock translation');
-      // Continue to mock translation as fallback
-    }
-
-    // If API translation failed or we're using mock mode, use our improved mock translation
-    const translatedText = improvedTranslate(text, targetCode);
-
-    resolve({
-      text: translatedText,
-      source: sourceCode,
-      isMock: true // Flag to indicate this is a mock translation
-    });
+      resolve({
+        text: translatedText,
+        source: sourceCode
+      });
+    }, 800); // Simulate network delay
   });
 };
 

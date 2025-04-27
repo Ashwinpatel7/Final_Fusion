@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import Logo from '../Logo/Logo';
+import Settings from '../Settings';
 import {
   FaGithub,
   FaQuestionCircle,
@@ -11,7 +12,8 @@ import {
   FaLanguage,
   FaHistory,
   FaBookmark,
-  FaTrophy
+  FaTrophy,
+  FaCog
 } from 'react-icons/fa';
 import { GITHUB_URL } from '../../utils/constants';
 
@@ -213,6 +215,7 @@ const MobileMenuButton = styled.button`
 
 const Header = () => {
   const location = useLocation();
+  const [showSettings, setShowSettings] = useState(false);
 
   const isActive = (path) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
@@ -222,7 +225,9 @@ const Header = () => {
     window.open(GITHUB_URL, '_blank', 'noopener,noreferrer');
   };
 
-  // We'll use Link components instead of these handlers
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
 
   return (
     <HeaderContainer>
@@ -269,16 +274,27 @@ const Header = () => {
         </NavLink>
 
         <HeaderButton
+          onClick={toggleSettings}
+          aria-label="Settings"
+        >
+          <FaCog size={18} />
+          <span>Settings</span>
+          <Tooltip>Open Settings</Tooltip>
+        </HeaderButton>
+
+        <HeaderButton
           onClick={handleGithubClick}
           aria-label="Visit GitHub repository"
         >
           <FaGithub size={18} />
-          GitHub
+          <span>GitHub</span>
           <Tooltip>View on GitHub</Tooltip>
         </HeaderButton>
 
         <ThemeToggle />
       </ControlsContainer>
+
+      {showSettings && <Settings onClose={toggleSettings} />}
     </HeaderContainer>
   );
 };

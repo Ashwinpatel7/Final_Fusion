@@ -2,7 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFromLang, setToLang, swapLanguages } from '../../store/translationSlice';
-import { LANGUAGES } from '../../utils/constants';
+import {
+  SOURCE_LANGUAGES,
+  TARGET_LANGUAGES,
+  AUTO_DETECT,
+  getNativeNameFromEnglish,
+  getEnglishNameFromNative
+} from '../../utils/supportedLanguages';
 import { FaExchangeAlt } from 'react-icons/fa';
 
 const SwitcherContainer = styled.div`
@@ -48,6 +54,14 @@ const Select = styled.select`
   cursor: pointer;
   transition: all 0.3s ease;
   appearance: none;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  direction: auto; /* Automatically handle RTL languages */
+
+  /* Ensure proper display of different writing systems */
+  option {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    direction: auto;
+  }
 
   &:focus {
     border-color: ${({ theme }) => theme.primary};
@@ -134,18 +148,17 @@ const LanguageSwitcher = () => {
       <LanguageSelectGroup>
         <Label htmlFor="from-lang">
           Source Language
-          {fromLang === 'Auto Detect' && <AutoDetectBadge>Auto</AutoDetectBadge>}
+          {fromLang === AUTO_DETECT && <AutoDetectBadge>Auto</AutoDetectBadge>}
         </Label>
         <SelectContainer>
-          <Select 
+          <Select
             id="from-lang"
-            value={fromLang} 
+            value={fromLang}
             onChange={handleFromLangChange}
           >
-            <option value="Auto Detect">Auto Detect</option>
-            {LANGUAGES.map((lang) => (
+            {SOURCE_LANGUAGES.map((lang) => (
               <option key={`from-${lang}`} value={lang}>
-                {lang}
+                {getNativeNameFromEnglish(lang)}
               </option>
             ))}
           </Select>
@@ -153,11 +166,11 @@ const LanguageSwitcher = () => {
         </SelectContainer>
       </LanguageSelectGroup>
 
-      <SwapButton 
-        onClick={handleSwap} 
+      <SwapButton
+        onClick={handleSwap}
         title="Swap languages"
         aria-label="Swap languages"
-        disabled={fromLang === 'Auto Detect'}
+        disabled={fromLang === AUTO_DETECT}
       >
         <FaExchangeAlt />
       </SwapButton>
@@ -165,14 +178,14 @@ const LanguageSwitcher = () => {
       <LanguageSelectGroup>
         <Label htmlFor="to-lang">Target Language</Label>
         <SelectContainer>
-          <Select 
+          <Select
             id="to-lang"
-            value={toLang} 
+            value={toLang}
             onChange={handleToLangChange}
           >
-            {LANGUAGES.map((lang) => (
+            {TARGET_LANGUAGES.map((lang) => (
               <option key={`to-${lang}`} value={lang}>
-                {lang}
+                {getNativeNameFromEnglish(lang)}
               </option>
             ))}
           </Select>

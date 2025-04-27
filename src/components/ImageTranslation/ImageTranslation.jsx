@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { 
-  FaImage, 
-  FaUpload, 
-  FaTrash, 
-  FaDownload, 
-  FaSpinner, 
+import {
+  FaImage,
+  FaUpload,
+  FaTrash,
+  FaDownload,
+  FaSpinner,
   FaExchangeAlt,
   FaCheck,
   FaCrop,
@@ -55,12 +55,33 @@ const Title = styled.h1`
 const Subtitle = styled.p`
   text-align: center;
   color: ${({ theme }) => theme.secondary};
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
   font-size: 1.1rem;
   line-height: 1.6;
+`;
+
+const AzureNotice = styled.div`
+  background-color: rgba(0, 120, 212, 0.1);
+  border: 1px solid rgba(0, 120, 212, 0.3);
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 2rem;
+  font-size: 14px;
+  color: #0078D4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  span {
+    font-weight: bold;
+    margin-right: 5px;
+  }
 `;
 
 const LanguageSelectionContainer = styled.div`
@@ -81,13 +102,13 @@ const UploadContainer = styled.div`
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 3rem 2rem;
-  border: 2px dashed ${({ isDragging, theme }) => 
+  border: 2px dashed ${({ isDragging, theme }) =>
     isDragging ? theme.primary : 'rgba(255, 255, 255, 0.2)'};
   margin-bottom: 2rem;
   transition: all 0.3s ease;
   position: relative;
   cursor: pointer;
-  
+
   &:hover {
     border-color: ${({ theme }) => theme.primary}77;
     background: rgba(255, 255, 255, 0.05);
@@ -127,7 +148,7 @@ const BrowseButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
@@ -184,7 +205,7 @@ const ImageControlButton = styled.button`
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: ${({ theme }) => theme.primaryOpacity};
     color: ${({ theme }) => theme.primary};
@@ -207,12 +228,12 @@ const TranslateButton = styled.button`
   width: 100%;
   max-width: 300px;
   margin: 0 auto;
-  
+
   &:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
   }
-  
+
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
@@ -255,7 +276,7 @@ const DownloadButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
@@ -266,7 +287,7 @@ const ResultContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -312,13 +333,13 @@ const TranslatedText = styled.div`
 const StatusMessage = styled.div`
   text-align: center;
   padding: 1rem;
-  color: ${({ theme, type }) => 
-    type === 'success' ? theme.success : 
-    type === 'error' ? theme.danger : 
+  color: ${({ theme, type }) =>
+    type === 'success' ? theme.success :
+    type === 'error' ? theme.danger :
     theme.secondary};
-  background: ${({ theme, type }) => 
-    type === 'success' ? theme.successOpacity : 
-    type === 'error' ? theme.dangerOpacity : 
+  background: ${({ theme, type }) =>
+    type === 'success' ? theme.successOpacity :
+    type === 'error' ? theme.dangerOpacity :
     'transparent'};
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -332,27 +353,27 @@ const StatusMessage = styled.div`
 const ImageTranslation = () => {
   const dispatch = useDispatch();
   const { sourceLanguage, targetLanguage } = useSelector(state => state.translation);
-  
+
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const [translationResult, setTranslationResult] = useState(null);
   const [status, setStatus] = useState(null);
-  
+
   const fileInputRef = useRef(null);
-  
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       validateAndSetImage(selectedFile);
     }
   };
-  
+
   const validateAndSetImage = (file) => {
     // Check file type
     const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    
+
     if (!validTypes.includes(file.type)) {
       setStatus({
         type: 'error',
@@ -360,7 +381,7 @@ const ImageTranslation = () => {
       });
       return;
     }
-    
+
     // Check file size (5MB limit)
     if (file.size > 5 * 1024 * 1024) {
       setStatus({
@@ -369,81 +390,81 @@ const ImageTranslation = () => {
       });
       return;
     }
-    
+
     setImage(file);
-    
+
     // Create image preview
     const reader = new FileReader();
     reader.onload = (e) => {
       setImagePreview(e.target.result);
     };
     reader.readAsDataURL(file);
-    
+
     setStatus(null);
     setTranslationResult(null);
   };
-  
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);
   };
-  
+
   const handleDragLeave = () => {
     setIsDragging(false);
   };
-  
+
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       validateAndSetImage(e.dataTransfer.files[0]);
     }
   };
-  
+
   const handleRemoveImage = () => {
     setImage(null);
     setImagePreview(null);
     setTranslationResult(null);
     setStatus(null);
   };
-  
+
   const handleTranslate = async () => {
     if (!image) return;
-    
+
     setIsTranslating(true);
     setStatus({
       type: 'info',
       message: 'Analyzing image and extracting text...'
     });
-    
+
     try {
       // In a real application, you would upload the image to a server for OCR and translation
       // For this demo, we'll simulate the OCR and translation process
-      
+
       // Simulate API call with a delay
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // Update status
       setStatus({
         type: 'info',
         message: 'Translating extracted text...'
       });
-      
+
       // Simulate another delay for translation
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // For demo purposes, we'll use mock extracted text based on the image name
       const extractedText = generateMockExtractedText(image.name);
-      
+
       // Generate mock translated text
       const translatedText = generateMockTranslatedText(extractedText, sourceLanguage, targetLanguage);
-      
+
       setTranslationResult({
         extractedText,
         translatedText
       });
-      
+
       setStatus({
         type: 'success',
         message: 'Image text translated successfully!'
@@ -457,13 +478,13 @@ const ImageTranslation = () => {
       setIsTranslating(false);
     }
   };
-  
+
   const handleDownload = () => {
     if (!translationResult) return;
-    
+
     // Create a blob from the translated text
     const blob = new Blob([translationResult.translatedText], { type: 'text/plain' });
-    
+
     // Create a download link
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -471,12 +492,12 @@ const ImageTranslation = () => {
     a.download = `translated_text_${new Date().getTime()}.txt`;
     document.body.appendChild(a);
     a.click();
-    
+
     // Clean up
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  
+
   // Helper function to generate mock extracted text
   const generateMockExtractedText = (imageName) => {
     // In a real app, this would be the result of OCR on the image
@@ -487,17 +508,17 @@ const ImageTranslation = () => {
       "WARNING: Hazardous materials storage area. Authorized personnel only. Proper safety equipment must be worn at all times.",
       "PRODUCT INFORMATION\nModel: XR-5000\nSerial Number: 78542169\nManufacturing Date: 05/2023\nWarranty: 2 years limited"
     ];
-    
+
     // Select a mock text based on the image name
     const hash = imageName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return mockTexts[hash % mockTexts.length];
   };
-  
+
   // Helper function to generate mock translated text
   const generateMockTranslatedText = (text, sourceLanguage, targetLanguage) => {
     // In a real app, this would be the result of translation API
     // For demo, we'll just add a prefix and some modifications
-    
+
     if (targetLanguage === 'es') {
       // Spanish-like modifications
       return text
@@ -575,7 +596,7 @@ const ImageTranslation = () => {
       return `[Translated from ${sourceLanguage} to ${targetLanguage}]\n\n${text}`;
     }
   };
-  
+
   return (
     <Container>
       <Title>Image Translation</Title>
@@ -583,11 +604,16 @@ const ImageTranslation = () => {
         Upload images containing text and our AI will extract and translate the text
         while preserving the context. Perfect for signs, menus, documents, and more.
       </Subtitle>
-      
+
+      <AzureNotice>
+        <span>Powered by Team Final Fusion</span>
+        - Advanced image text extraction and translation services for our college final year project
+      </AzureNotice>
+
       <LanguageSelectionContainer>
         <LanguageSwitcher />
       </LanguageSelectionContainer>
-      
+
       {status && (
         <StatusMessage type={status.type}>
           {status.type === 'success' && <FaCheck />}
@@ -596,9 +622,9 @@ const ImageTranslation = () => {
           {status.message}
         </StatusMessage>
       )}
-      
+
       {!image ? (
-        <UploadContainer 
+        <UploadContainer
           isDragging={isDragging}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -613,9 +639,9 @@ const ImageTranslation = () => {
           <BrowseButton>
             <FaUpload /> Browse Images
           </BrowseButton>
-          <FileInput 
-            type="file" 
-            ref={fileInputRef} 
+          <FileInput
+            type="file"
+            ref={fileInputRef}
             onChange={handleFileChange}
             accept="image/jpeg,image/png,image/gif,image/webp"
           />
@@ -625,7 +651,7 @@ const ImageTranslation = () => {
           <ImagePreviewWrapper>
             <ImagePreview src={imagePreview} alt="Preview" />
           </ImagePreviewWrapper>
-          
+
           <ImageControls>
             <ImageControlButton title="Zoom In">
               <FaSearchPlus />
@@ -640,9 +666,9 @@ const ImageTranslation = () => {
               <FaTrash />
             </ImageControlButton>
           </ImageControls>
-          
-          <TranslateButton 
-            onClick={handleTranslate} 
+
+          <TranslateButton
+            onClick={handleTranslate}
             disabled={isTranslating || !image}
           >
             {isTranslating ? (
@@ -657,7 +683,7 @@ const ImageTranslation = () => {
           </TranslateButton>
         </ImagePreviewContainer>
       )}
-      
+
       {translationResult && (
         <ResultContainer>
           <ResultHeader>
@@ -668,13 +694,13 @@ const ImageTranslation = () => {
               <FaDownload /> Download Translation
             </DownloadButton>
           </ResultHeader>
-          
+
           <ResultContent>
             <ResultPanel>
               <PanelTitle>Extracted Text</PanelTitle>
               <ExtractedText>{translationResult.extractedText}</ExtractedText>
             </ResultPanel>
-            
+
             <ResultPanel>
               <PanelTitle>Translated Text</PanelTitle>
               <TranslatedText>{translationResult.translatedText}</TranslatedText>

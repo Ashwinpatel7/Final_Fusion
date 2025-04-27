@@ -23,8 +23,12 @@ import TranslationHistory from './components/TranslationHistory';
 import QuickTranslate from './components/QuickTranslate';
 import Gamification from './components/Gamification';
 
+
 // Redux actions
-import { setInputText } from './store/translationSlice';
+import { setInputText, translateTextAsync } from './store/translationSlice';
+
+// Utilities
+import { getLanguageCode } from './utils/supportedLanguages';
 
 // Animations
 const fadeIn = keyframes`
@@ -188,41 +192,58 @@ const TranslationInterface = () => {
   const {
     inputText,
     outputText,
-    detectedLanguageName
+    detectedLanguageName,
+    fromLang,
+    toLang
   } = useSelector(state => state.translation);
 
-  const [languageSelectionMode, setLanguageSelectionMode] = useState('tiles');
+  // No longer need languageSelectionMode since we're only using dropdown view
 
   const handleInputChange = (e) => {
     dispatch(setInputText(e.target.value));
   };
 
+  // Handle translation when the user clicks the translate button
+  const handleTranslate = () => {
+    if (inputText.trim()) {
+      console.log(`Translation requested in App.jsx:
+        - From: ${fromLang}
+        - To: ${toLang}
+        - Text: "${inputText.substring(0, 50)}${inputText.length > 50 ? '...' : ''}"`);
+
+      // Check if we're translating to Hindi
+      if (toLang === 'hi') {
+        console.log('Hindi translation requested - ensuring proper API usage');
+      }
+
+      dispatch(translateTextAsync({
+        text: inputText,
+        fromLang,
+        toLang
+      }));
+    }
+  };
+
   return (
     <MainContent>
-      <LanguageSelectionContainer>
-        <TabsContainer>
-          <Tab
-            active={languageSelectionMode === 'tiles'}
-            onClick={() => setLanguageSelectionMode('tiles')}
-          >
-            Tile View
-          </Tab>
-          <Tab
-            active={languageSelectionMode === 'dropdown'}
-            onClick={() => setLanguageSelectionMode('dropdown')}
-          >
-            Dropdown View
-          </Tab>
-        </TabsContainer>
+      <div style={{
+        backgroundColor: 'rgba(0, 120, 212, 0.1)',
+        border: '1px solid rgba(0, 120, 212, 0.3)',
+        borderRadius: '8px',
+        padding: '10px 15px',
+        marginBottom: '20px',
+        fontSize: '14px',
+        color: '#0078D4',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Powered by Team Final Fusion</span>
+        - Advanced translation services for our college final year project
+      </div>
 
-        {languageSelectionMode === 'tiles' ? (
-          <div>
-            <LanguageTiles forSource={true} />
-            <LanguageTiles forSource={false} />
-          </div>
-        ) : (
-          <LanguageSwitcher />
-        )}
+      <LanguageSelectionContainer>
+        <LanguageSwitcher />
       </LanguageSelectionContainer>
 
       <TextAreasContainer>
@@ -240,10 +261,11 @@ const TranslationInterface = () => {
           placeholder="Translation will appear here..."
           readOnly
           detectedLanguage={detectedLanguageName}
+          languageCode={getLanguageCode(toLang)}
         />
       </TextAreasContainer>
 
-      <ControlButtons />
+      <ControlButtons onTranslate={handleTranslate} />
 
       <Gamification />
       <RecentActivity />

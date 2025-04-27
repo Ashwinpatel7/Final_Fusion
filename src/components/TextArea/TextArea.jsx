@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { getNativeNameFromEnglish, getLanguageCode } from '../../utils/supportedLanguages';
+import { isRtlLanguage, getFontSettings } from '../../utils/languageUtils';
 
 const TextAreaContainer = styled.div`
   position: relative;
@@ -56,6 +58,11 @@ const StyledTextArea = styled.textarea`
   line-height: 1.5;
   resize: none;
   flex: 1;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  direction: ${({ isRtl }) => isRtl ? 'rtl' : 'ltr'}; /* Handle RTL languages */
+  text-align: ${({ isRtl }) => isRtl ? 'right' : 'left'};
+  unicode-bidi: isolate;
+  font-feature-settings: "kern", "liga", "clig", "calt";
 
   &::placeholder {
     color: ${({ theme }) => theme.secondary}80;
@@ -126,6 +133,8 @@ const DetectedLanguage = styled.div`
   font-size: 0.75rem;
   color: ${({ theme }) => theme.primary};
   font-style: italic;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  direction: auto; /* Automatically handle RTL languages */
 `;
 
 const TextArea = ({
@@ -135,11 +144,19 @@ const TextArea = ({
   placeholder,
   readOnly = false,
   detectedLanguage = null,
-  maxLength = 5000
+  maxLength = 5000,
+  languageCode = null // Language code for the text (used for RTL detection and font settings)
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const textAreaRef = useRef(null);
+
+  // Determine if the language is RTL
+  const langCode = languageCode || (detectedLanguage ? getLanguageCode(detectedLanguage) : null);
+  const isRtl = langCode ? isRtlLanguage(langCode) : false;
+
+  // Get font settings for the language
+  const fontSettings = langCode ? getFontSettings(langCode) : {};
 
   useEffect(() => {
     setCharCount(value.length);
@@ -175,6 +192,12 @@ const TextArea = ({
         onBlur={handleBlur}
         maxLength={maxLength}
         aria-label={label}
+        isRtl={isRtl}
+        style={{
+          fontFamily: fontSettings.fontFamily,
+          fontSize: fontSettings.fontSize,
+          lineHeight: fontSettings.lineHeight
+        }}
       />
       <CharCount>
         <CharCountRing percentage={percentage} />
@@ -182,7 +205,7 @@ const TextArea = ({
       </CharCount>
       {detectedLanguage && (
         <DetectedLanguage>
-          Detected: {detectedLanguage}
+          Detected: {getNativeNameFromEnglish(detectedLanguage)}
         </DetectedLanguage>
       )}
     </TextAreaContainer>

@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { setFromLang, setToLang } from '../../store/translationSlice';
-import { LANGUAGES } from '../../utils/constants';
+import {
+  SOURCE_LANGUAGES,
+  TARGET_LANGUAGES,
+  getNativeNameFromEnglish,
+  getEnglishNameFromNative
+} from '../../utils/supportedLanguages';
 import { FaStar, FaHistory, FaGlobeAmericas } from 'react-icons/fa';
 
 const TilesContainer = styled.div`
@@ -114,6 +119,12 @@ const LanguageName = styled.span`
   color: ${({ selected, theme }) => selected ? theme.primary : theme.textColor};
   text-align: center;
   margin-top: 0.5rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  direction: auto; /* Automatically handle RTL languages */
+  min-height: 2.5em; /* Ensure consistent height for all languages */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const LanguageIcon = styled.div`
@@ -162,7 +173,7 @@ const LanguageTiles = ({ forSource = true }) => {
   const { fromLang, toLang } = useSelector(state => state.translation);
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
-  const [displayLanguages, setDisplayLanguages] = useState(LANGUAGES);
+  const [displayLanguages, setDisplayLanguages] = useState(forSource ? SOURCE_LANGUAGES : TARGET_LANGUAGES);
 
   useEffect(() => {
     // Update displayed languages based on active tab
@@ -171,7 +182,7 @@ const LanguageTiles = ({ forSource = true }) => {
     } else if (activeTab === 'recent') {
       setDisplayLanguages(RECENT_LANGUAGES);
     } else {
-      setDisplayLanguages(LANGUAGES);
+      setDisplayLanguages(forSource ? SOURCE_LANGUAGES : TARGET_LANGUAGES);
     }
   }, [activeTab]);
 
@@ -194,22 +205,22 @@ const LanguageTiles = ({ forSource = true }) => {
       <TilesHeader>
         <TilesTitle>{forSource ? 'Source Language' : 'Target Language'}</TilesTitle>
         <TilesToggle>
-          <ToggleButton 
-            active={activeTab === 'all'} 
+          <ToggleButton
+            active={activeTab === 'all'}
             onClick={() => setActiveTab('all')}
           >
             <FaGlobeAmericas />
             All
           </ToggleButton>
-          <ToggleButton 
-            active={activeTab === 'favorites'} 
+          <ToggleButton
+            active={activeTab === 'favorites'}
             onClick={() => setActiveTab('favorites')}
           >
             <FaStar />
             Favorites
           </ToggleButton>
-          <ToggleButton 
-            active={activeTab === 'recent'} 
+          <ToggleButton
+            active={activeTab === 'recent'}
             onClick={() => setActiveTab('recent')}
           >
             <FaHistory />
@@ -220,30 +231,33 @@ const LanguageTiles = ({ forSource = true }) => {
 
       <TilesGrid expanded={expanded}>
         {forSource && (
-          <LanguageTile 
-            selected={currentValue === 'Auto Detect'} 
+          <LanguageTile
+            selected={currentValue === 'Auto Detect'}
             onClick={() => handleLanguageSelect('Auto Detect')}
           >
             <LanguageIcon>🔍</LanguageIcon>
             <LanguageName selected={currentValue === 'Auto Detect'}>Auto Detect</LanguageName>
           </LanguageTile>
         )}
-        
-        {displayLanguages.map(language => (
-          <LanguageTile 
-            key={language} 
-            selected={currentValue === language}
-            onClick={() => handleLanguageSelect(language)}
-          >
-            <LanguageIcon>
-              {language.charAt(0)}
-            </LanguageIcon>
-            <LanguageName selected={currentValue === language}>
-              {language}
-            </LanguageName>
-            {FAVORITE_LANGUAGES.includes(language) && <FavoriteIcon>★</FavoriteIcon>}
-          </LanguageTile>
-        ))}
+
+        {displayLanguages.map(language => {
+          const nativeName = getNativeNameFromEnglish(language);
+          return (
+            <LanguageTile
+              key={language}
+              selected={currentValue === language}
+              onClick={() => handleLanguageSelect(language)}
+            >
+              <LanguageIcon>
+                {nativeName.charAt(0)}
+              </LanguageIcon>
+              <LanguageName selected={currentValue === language}>
+                {nativeName}
+              </LanguageName>
+              {FAVORITE_LANGUAGES.includes(language) && <FavoriteIcon>★</FavoriteIcon>}
+            </LanguageTile>
+          );
+        })}
       </TilesGrid>
 
       <ShowMoreButton onClick={toggleExpanded}>

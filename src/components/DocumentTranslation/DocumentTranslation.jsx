@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { 
-  FaFileUpload, 
-  FaFileAlt, 
-  FaFilePdf, 
-  FaFileWord, 
+import {
+  FaFileUpload,
+  FaFileAlt,
+  FaFilePdf,
+  FaFileWord,
   FaFileExcel,
   FaFileImage,
   FaFileCode,
@@ -56,12 +56,33 @@ const Title = styled.h1`
 const Subtitle = styled.p`
   text-align: center;
   color: ${({ theme }) => theme.secondary};
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
   font-size: 1.1rem;
   line-height: 1.6;
+`;
+
+const AzureNotice = styled.div`
+  background-color: rgba(0, 120, 212, 0.1);
+  border: 1px solid rgba(0, 120, 212, 0.3);
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 2rem;
+  font-size: 14px;
+  color: #0078D4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  span {
+    font-weight: bold;
+    margin-right: 5px;
+  }
 `;
 
 const LanguageSelectionContainer = styled.div`
@@ -82,13 +103,13 @@ const UploadContainer = styled.div`
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 3rem 2rem;
-  border: 2px dashed ${({ isDragging, theme }) => 
+  border: 2px dashed ${({ isDragging, theme }) =>
     isDragging ? theme.primary : 'rgba(255, 255, 255, 0.2)'};
   margin-bottom: 2rem;
   transition: all 0.3s ease;
   position: relative;
   cursor: pointer;
-  
+
   &:hover {
     border-color: ${({ theme }) => theme.primary}77;
     background: rgba(255, 255, 255, 0.05);
@@ -128,7 +149,7 @@ const BrowseButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
@@ -202,7 +223,7 @@ const ActionButton = styled.button`
   transition: all 0.2s ease;
   padding: 0.5rem;
   border-radius: 50%;
-  
+
   &:hover {
     color: ${({ theme, danger }) => danger ? theme.danger : theme.primary};
     background: ${({ theme, danger }) => danger ? theme.dangerOpacity : theme.primaryOpacity};
@@ -225,12 +246,12 @@ const TranslateButton = styled.button`
   width: 100%;
   max-width: 300px;
   margin: 0 auto;
-  
+
   &:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
   }
-  
+
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
@@ -273,7 +294,7 @@ const DownloadButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
@@ -288,7 +309,7 @@ const ResultPreview = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.1);
   max-height: 500px;
   overflow-y: auto;
-  
+
   pre {
     white-space: pre-wrap;
     word-break: break-word;
@@ -302,13 +323,13 @@ const ResultPreview = styled.div`
 const StatusMessage = styled.div`
   text-align: center;
   padding: 1rem;
-  color: ${({ theme, type }) => 
-    type === 'success' ? theme.success : 
-    type === 'error' ? theme.danger : 
+  color: ${({ theme, type }) =>
+    type === 'success' ? theme.success :
+    type === 'error' ? theme.danger :
     theme.secondary};
-  background: ${({ theme, type }) => 
-    type === 'success' ? theme.successOpacity : 
-    type === 'error' ? theme.dangerOpacity : 
+  background: ${({ theme, type }) =>
+    type === 'success' ? theme.successOpacity :
+    type === 'error' ? theme.dangerOpacity :
     'transparent'};
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -331,7 +352,7 @@ const formatFileSize = (bytes) => {
 // Helper function to get file icon based on file type
 const getFileIcon = (fileName) => {
   const extension = fileName.split('.').pop().toLowerCase();
-  
+
   switch (extension) {
     case 'pdf':
       return <FaFilePdf />;
@@ -360,33 +381,33 @@ const getFileIcon = (fileName) => {
 const DocumentTranslation = () => {
   const dispatch = useDispatch();
   const { sourceLanguage, targetLanguage } = useSelector(state => state.translation);
-  
+
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const [translationResult, setTranslationResult] = useState(null);
   const [status, setStatus] = useState(null);
-  
+
   const fileInputRef = useRef(null);
-  
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       validateAndSetFile(selectedFile);
     }
   };
-  
+
   const validateAndSetFile = (file) => {
     // Check file type
     const validTypes = [
-      'application/pdf', 
-      'application/msword', 
+      'application/pdf',
+      'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       'text/plain',
       'text/html',
       'text/csv'
     ];
-    
+
     if (!validTypes.includes(file.type)) {
       setStatus({
         type: 'error',
@@ -394,7 +415,7 @@ const DocumentTranslation = () => {
       });
       return;
     }
-    
+
     // Check file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
       setStatus({
@@ -403,81 +424,81 @@ const DocumentTranslation = () => {
       });
       return;
     }
-    
+
     setFile(file);
     setStatus(null);
     setTranslationResult(null);
   };
-  
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);
   };
-  
+
   const handleDragLeave = () => {
     setIsDragging(false);
   };
-  
+
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       validateAndSetFile(e.dataTransfer.files[0]);
     }
   };
-  
+
   const handleRemoveFile = () => {
     setFile(null);
     setTranslationResult(null);
     setStatus(null);
   };
-  
+
   const handleTranslate = async () => {
     if (!file) return;
-    
+
     setIsTranslating(true);
     setStatus({
       type: 'info',
       message: 'Translating document...'
     });
-    
+
     try {
       // In a real application, you would upload the file to a server for translation
       // For this demo, we'll simulate the translation process
-      
+
       // Simulate API call with a delay
       await new Promise(resolve => setTimeout(resolve, 3000));
-      
+
       // For demo purposes, we'll just read the file and show its content
       const reader = new FileReader();
-      
+
       reader.onload = (e) => {
         const content = e.target.result;
-        
+
         // In a real app, this would be the translated content from the API
         // For demo, we'll just add a prefix to show it's "translated"
         const translatedContent = `[Translated from ${sourceLanguage} to ${targetLanguage}]\n\n${content}`;
-        
+
         setTranslationResult({
           originalFileName: file.name,
           translatedContent,
           translatedFileName: `translated_${file.name}`
         });
-        
+
         setStatus({
           type: 'success',
           message: 'Document translated successfully!'
         });
       };
-      
+
       reader.onerror = () => {
         setStatus({
           type: 'error',
           message: 'Error reading file. Please try again.'
         });
       };
-      
+
       // Read as text for demo purposes
       // In a real app, you'd handle different file types appropriately
       reader.readAsText(file);
@@ -490,13 +511,13 @@ const DocumentTranslation = () => {
       setIsTranslating(false);
     }
   };
-  
+
   const handleDownload = () => {
     if (!translationResult) return;
-    
+
     // Create a blob from the translated content
     const blob = new Blob([translationResult.translatedContent], { type: 'text/plain' });
-    
+
     // Create a download link
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -504,12 +525,12 @@ const DocumentTranslation = () => {
     a.download = translationResult.translatedFileName;
     document.body.appendChild(a);
     a.click();
-    
+
     // Clean up
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  
+
   return (
     <Container>
       <Title>Document Translation</Title>
@@ -517,11 +538,16 @@ const DocumentTranslation = () => {
         Upload documents in various formats and translate them while preserving formatting.
         Supported formats include PDF, Word, TXT, HTML, and CSV.
       </Subtitle>
-      
+
+      <AzureNotice>
+        <span>Powered by Team Final Fusion</span>
+        - Advanced document translation services for our college final year project
+      </AzureNotice>
+
       <LanguageSelectionContainer>
         <LanguageSwitcher />
       </LanguageSelectionContainer>
-      
+
       {status && (
         <StatusMessage type={status.type}>
           {status.type === 'success' && <FaCheck />}
@@ -530,9 +556,9 @@ const DocumentTranslation = () => {
           {status.message}
         </StatusMessage>
       )}
-      
+
       {!file ? (
-        <UploadContainer 
+        <UploadContainer
           isDragging={isDragging}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -547,9 +573,9 @@ const DocumentTranslation = () => {
           <BrowseButton>
             <FaFileAlt /> Browse Files
           </BrowseButton>
-          <FileInput 
-            type="file" 
-            ref={fileInputRef} 
+          <FileInput
+            type="file"
+            ref={fileInputRef}
             onChange={handleFileChange}
             accept=".pdf,.doc,.docx,.txt,.html,.csv"
           />
@@ -572,9 +598,9 @@ const DocumentTranslation = () => {
               </ActionButton>
             </FileActions>
           </FilePreview>
-          
-          <TranslateButton 
-            onClick={handleTranslate} 
+
+          <TranslateButton
+            onClick={handleTranslate}
             disabled={isTranslating || !file}
           >
             {isTranslating ? (
@@ -589,7 +615,7 @@ const DocumentTranslation = () => {
           </TranslateButton>
         </FilePreviewContainer>
       )}
-      
+
       {translationResult && (
         <ResultContainer>
           <ResultHeader>
@@ -600,7 +626,7 @@ const DocumentTranslation = () => {
               <FaDownload /> Download Translation
             </DownloadButton>
           </ResultHeader>
-          
+
           <ResultPreview>
             <pre>{translationResult.translatedContent}</pre>
           </ResultPreview>
